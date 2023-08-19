@@ -82,6 +82,7 @@
     flex-direction: column;
     gap: 16px;
     background: #ffd652;
+    border-radius: 30px;
 }
 
 .GameGrid__winner {
