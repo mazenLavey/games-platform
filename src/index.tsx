@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { TicTakToeProvider } from "context/TicTakToeContext";
+import { BlackjackProvider } from 'context/BlackjackContext';
 import App from './App';
 
 const root = ReactDOM.createRoot(
@@ -9,7 +10,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <TicTakToeProvider>
-      <App />
+      <BlackjackProvider>
+        <App />
+      </BlackjackProvider>
     </TicTakToeProvider>
   </React.StrictMode>
 );

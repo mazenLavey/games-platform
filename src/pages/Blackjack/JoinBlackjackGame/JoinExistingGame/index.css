@@ -1,0 +1,12 @@
+
+
+.JoinExistingGame__inputs,
+.JoinExistingGame {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.JoinExistingGame__inputs {
+    gap: 8px;
+}
