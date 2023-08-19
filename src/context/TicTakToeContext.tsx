@@ -30,7 +30,6 @@ const TicTakToeContext = createContext<MessagesContextType>({
         Nextplayer: null,
         winsX: 0,
         winsO: 0,
-        playersNumAlowed: 2
     },
     playerInfo: {
         playerName: "",
@@ -57,7 +56,6 @@ const TicTakToeProvider: React.FC<Props> = ({ children }) => {
         Nextplayer: null,
         winsX: 0,
         winsO: 0,
-        playersNumAlowed: 2
     });
 
     const [playerInfo, setPlayerInfo] = useState<playerInfoType>({
@@ -96,7 +94,6 @@ const TicTakToeProvider: React.FC<Props> = ({ children }) => {
             Nextplayer: playerSymbol === "x" ? "o" : "x",
             winsX: 0,
             winsO: 0,
-            playersNumAlowed: 1
         };
         
         const TicTakToeRef = ref(db, 'TicTakToe/' + newGame.id);
@@ -121,21 +118,12 @@ const TicTakToeProvider: React.FC<Props> = ({ children }) => {
                 const data = snapshot.val();
                 let parsedData = JSON.parse(data)
 
-                if(parsedData.playersNumAlowed === 1) {
-                    const updatedData: NewGameType = {
-                        ...parsedData,
-                        playersNumAlowed: 0
-                    }
-                    
-                    setPlayerInfo({
-                        playerName: secondPlayerName,
-                        playerSymbol: parsedData.Nextplayer
-                    })
+                setPlayerInfo({
+                    playerName: secondPlayerName,
+                    playerSymbol: parsedData.Nextplayer
+                })
 
-                    setGameData(updatedData)
-                } else {
-                    throw new Error("This session already has two players.")
-                }
+                setGameData(parsedData)
 
             } else {
                 toastNotifications.warn()
