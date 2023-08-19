@@ -4,7 +4,7 @@
 .Home {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 16px;
+    gap: 24px;
 }
 
 .Home__thumbnail-wrapper {
@@ -38,4 +38,25 @@
 .Home__thumbnail-title {
     font-size: 24px;
     font-weight: 500;
+}
+
+.Home__thumbnail-wrapper--disabled {
+    position: relative;
+    pointer-events: none;
+}
+
+.Home__thumbnail-wrapper--disabled  img {
+    filter: brightness(0.5);
+}
+
+.Home__thumbnail-wrapper--disabled::after {
+    content: "Coming soon...";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: 500;
+    font-size: 20px;
+    white-space: nowrap;
 }
