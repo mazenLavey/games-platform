@@ -44,7 +44,8 @@ const JoinExistingGame: React.FC = () => {
 
         try {
             setIsSubmitting(true)
-            await joinExistingGame(userData.gameId, userData.userName)
+            await joinExistingGame(userData.gameId, userData.userName);
+
             setTimeout(() => {
                 setIsSubmitting(false)
             }, 300)

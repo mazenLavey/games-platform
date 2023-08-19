@@ -30,6 +30,7 @@ const TicTakToeContext = createContext<MessagesContextType>({
         Nextplayer: null,
         winsX: 0,
         winsO: 0,
+        playersNumAlowed: 2
     },
     playerInfo: {
         playerName: "",
@@ -55,7 +56,8 @@ const TicTakToeProvider: React.FC<Props> = ({ children }) => {
         winner: null,
         Nextplayer: null,
         winsX: 0,
-        winsO: 0
+        winsO: 0,
+        playersNumAlowed: 2
     });
 
     const [playerInfo, setPlayerInfo] = useState<playerInfoType>({
@@ -93,7 +95,8 @@ const TicTakToeProvider: React.FC<Props> = ({ children }) => {
             winner: null,
             Nextplayer: playerSymbol === "x" ? "o" : "x",
             winsX: 0,
-            winsO: 0
+            winsO: 0,
+            playersNumAlowed: 1
         };
         
         const TicTakToeRef = ref(db, 'TicTakToe/' + newGame.id);
@@ -116,18 +119,29 @@ const TicTakToeProvider: React.FC<Props> = ({ children }) => {
         get(child(TicTakToeRef, `TicTakToe/${existingGameId}`)).then((snapshot) => {
             if (snapshot.exists()) {
                 const data = snapshot.val();
-                const parsedData = JSON.parse(data)
+                let parsedData = JSON.parse(data)
 
-                setPlayerInfo({
-                    playerName: secondPlayerName,
-                    playerSymbol: parsedData.Nextplayer
-                })
-                setGameData(parsedData)
+                if(parsedData.playersNumAlowed === 1) {
+                    const updatedData: NewGameType = {
+                        ...parsedData,
+                        playersNumAlowed: 0
+                    }
+                    
+                    setPlayerInfo({
+                        playerName: secondPlayerName,
+                        playerSymbol: parsedData.Nextplayer
+                    })
+
+                    setGameData(updatedData)
+                } else {
+                    throw new Error("This session already has two players.")
+                }
+
             } else {
                 toastNotifications.warn()
             }
         }).catch((error) => {
-            console.error(error);
+            toastNotifications.error(error);
         });
     }
 

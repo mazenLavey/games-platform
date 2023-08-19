@@ -21,5 +21,6 @@ export interface NewGameType {
     winner: GameStatusType,
     Nextplayer: playerSymbolType | null,
     winsX: number,
-    winsO: number
+    winsO: number,
+    playersNumAlowed: number
 }
