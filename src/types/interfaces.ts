@@ -11,7 +11,7 @@ export type playerInfoType = {
 }
 
 export interface NewGameType {
-    readonly id: string,
+    id: string,
     gameFinished: boolean,
     grid: [
         [null, null, null],

@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from 'react';
 import { db } from 'config/firebase';
 import { ref, set, onValue, child, get } from "firebase/database";
 import { GameStatusType, NewGameType, playerInfoType, playerSymbolType } from 'types/interfaces';
-import { nanoid } from 'nanoid';
+import { toastNotifications } from 'common/Toastify';
 
 type Props = {
     children: React.ReactNode
@@ -13,7 +13,7 @@ interface MessagesContextType {
     playerInfo: playerInfoType,
     handleBoxClick: (col: number, row: number) => void,
     handleReset: () => void,
-    initGame: (playerName: string, playerSymbol: playerSymbolType) => void,
+    initGame: (gameId: string, playerName: string, playerSymbol: playerSymbolType) => void,
     joinExistingGame: (existingGameId: string, secondPlayerName: string) => void,
 }
 
@@ -37,7 +37,7 @@ const TicTakToeContext = createContext<MessagesContextType>({
     },
     handleBoxClick: (col, row) => { },
     handleReset: () => { },
-    initGame: (playerName, playerSymbol) => { },
+    initGame: (gameId, playerName, playerSymbol) => { },
     joinExistingGame: (existingGameId, secondPlayerName) => { },
 })
 
@@ -75,15 +75,15 @@ const TicTakToeProvider: React.FC<Props> = ({ children }) => {
                 })
 
             } catch (error: any) {
-                console.log(error.message)
+                toastNotifications.error(error.message)
             }
         }
     }, [gameData.id]);
 
 
-    const initGame = async (playerName: string, playerSymbol: playerSymbolType) => {
+    const initGame = async (gameId: string, playerName: string, playerSymbol: playerSymbolType) => {
         const newGame: NewGameType = {
-            id: nanoid(),
+            id: gameId,
             gameFinished: false,
             grid: [
                 [null, null, null],
@@ -95,7 +95,7 @@ const TicTakToeProvider: React.FC<Props> = ({ children }) => {
             winsX: 0,
             winsO: 0
         };
-
+        
         const TicTakToeRef = ref(db, 'TicTakToe/' + newGame.id);
 
         try {
@@ -124,7 +124,7 @@ const TicTakToeProvider: React.FC<Props> = ({ children }) => {
                 })
                 setGameData(parsedData)
             } else {
-                console.log("No data available");
+                toastNotifications.warn()
             }
         }).catch((error) => {
             console.error(error);

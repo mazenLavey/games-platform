@@ -1,0 +1,79 @@
+.GameGrid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    background: #4b18aa;
+    border: 8px solid #511cb8;
+    outline: 3px dashed white;
+    width: fit-content;
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+.GameGrid__box {
+    height: 100%;
+    border: dashed white;
+    cursor: pointer;
+}
+
+.GameGrid__box:hover {
+    background-color: #46169a;
+}
+
+.GameGrid__box--0-0 {
+    border-width: 0 3px 3px 0;
+}
+
+.GameGrid__box--0-1 {
+    border-width: 0 3px 0 0;
+}
+
+.GameGrid__box--0-2 {
+    border-width: 3px 3px 0px 0px;
+}
+
+.GameGrid__box--1-0 {
+    border-width: 0 0 3px 0;
+}
+
+.GameGrid__box--1-1 {
+    border-width: 0;
+}
+
+.GameGrid__box--1-2 {
+    border-width: 3px 0 0 0;
+}
+
+.GameGrid__box--2-0 {
+    border-width: 0px 0px 3px 3px;
+}
+
+.GameGrid__box--2-1 {
+    border-width: 0 0 0 3px;
+}
+
+.GameGrid__box--2-2 {
+    border-width: 3px 0px 0px 3px;
+}
+
+.GameGrid__results {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    background: #ffd652;
+}
+
+.GameGrid__winner {
+    font-size: 24px;
+    font-weight: 600;
+    color: #3b1882;
+    text-transform: uppercase;
+}

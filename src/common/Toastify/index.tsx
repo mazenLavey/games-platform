@@ -24,17 +24,17 @@ const Toastify = () => {
 
 
 export const toastNotifications = {
-    warn: () => toast.warn("You are logged out.", {
+    warn: () => toast.warn("Somthing went wrong.", {
         icon: <FontAwesomeIcon icon={faCircleXmark} style={{color: "orange"}} />
     }),
     error: (error: string) => toast.error(`${error}`, {
         icon: <FontAwesomeIcon icon={faCircleXmark} style={{color: "red"}}/>
     }),
-    success: () => toast.success("Welcome!", {
-        icon: <FontAwesomeIcon icon={faCircleCheck} style={{color: "green"}}/>
+    success: () => toast.success("Send the game 'ID' to start playing with a friend.", {
+        icon: <FontAwesomeIcon icon={faCircleCheck} style={{color: "#ff5eb2"}}/>
     }),
-    info: () => toast.info("Inforamtion updated.", {
-        icon: <FontAwesomeIcon icon={faCircleCheck} style={{color: "blue"}}/>
+    info: () => toast.info("Link copied.", {
+        icon: <FontAwesomeIcon icon={faCircleCheck} style={{color: "#7f19f2"}}/>
     })
 }
 
