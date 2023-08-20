@@ -1,4 +1,5 @@
 import { useState, useContext } from 'react';
+import { BlackjackContext } from 'context/BlackjackContext';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Backdrop from '@mui/material/Backdrop';
@@ -15,7 +16,7 @@ type UserType = {
 }
 
 const JoinExistingGame: React.FC = () => {
-
+    const { joinGame } = useContext(BlackjackContext)
     const [userData, setUserData] = useState<UserType>({
         gameId: "",
         userName: ""
@@ -43,7 +44,8 @@ const JoinExistingGame: React.FC = () => {
 
         try {
             setIsSubmitting(true)
-
+            await joinGame(userData.gameId, userData.userName);
+            navigate(`/blackjack/${userData.gameId}`)
             setTimeout(() => {
                 setIsSubmitting(false)
             }, 300)

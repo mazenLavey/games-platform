@@ -1,0 +1,47 @@
+.PlayerBox {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.PlayerBox__header {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.PlayerBox__name {
+    font-size: 16px;
+    margin: 8px 0;
+}
+
+.PlayerBox__name::first-letter {
+    text-transform: capitalize;
+}
+
+.PlayerBox__cards-value {
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.PlayerBox__cards-wrapper {
+    display: flex;
+    height: 140px;
+    gap: 4px;
+    border: 1px solid #7777774d;
+    border-radius: 6px;
+    width: clamp(300px, 100%, 485px);
+}
+
+.PlayerBox__card-img {
+    width: 100px;
+}
+
+@media (max-width: 575px) {
+    .PlayerBox__card-img {
+        width: 65px;
+        height: 90px;
+    }
+}

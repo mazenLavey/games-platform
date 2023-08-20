@@ -2,11 +2,8 @@ import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import Button from '@mui/material/Button';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
-import BgIntro from './assets/bg.png';
-import BgIntroLight from './assets/bg-light.webp';
 import BlackjackLogo from './assets/logo.png';
 import Cards from './assets/cards.png';
-// import ElementX from './assets/element-02.png';
 import './index.css';
 
 const Blackjack: React.FC = () => {
@@ -17,10 +14,7 @@ const Blackjack: React.FC = () => {
     return (
         <main className="Blackjack">
             <div className="Blackjack__container container">
-                {/* <picture>
-                    <source srcSet={BgIntroLight} type="image/webp" />
-                    <img className="Blackjack__bg" src={BgIntro} alt="background" />
-                </picture> */}
+
                 {
                     location.pathname === '/blackjack' ?
                         <div className="Blackjack__logo-container">
@@ -29,8 +23,8 @@ const Blackjack: React.FC = () => {
                         :
                         null
                 }
+
                 <img className="Blackjack__cards" src={Cards} alt="background" />
-                {/* <img className="Blackjack__element-x" src={ElementX} alt="background" /> */}
 
                 {
                     location.pathname === '/blackjack' ?
@@ -39,7 +33,7 @@ const Blackjack: React.FC = () => {
                                 variant="contained"
                                 onClick={() => navigate('new-game')}
                                 sx={{
-                                    background: "linear-gradient(90deg, #e51d74, #8d4fea)",
+                                    background: "linear-gradient(60deg, #61000a, #0a3500)",
                                     borderRadius: "12px",
                                     fontWeight: "700",
                                     fontSize: "20px",

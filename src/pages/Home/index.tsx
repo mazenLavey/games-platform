@@ -13,7 +13,7 @@ const Home: React.FC = () => {
                 <h2 className="Home__thumbnail-title">Tic&nbsp;Tak&nbsp;Toe</h2>
             </NavLink>
 
-            <NavLink className={"Home__thumbnail-wrapper Home__thumbnail-wrapper--disabled"} to={"blackjack"}>
+            <NavLink className={"Home__thumbnail-wrapper"} to={"blackjack"}>
                 <div className="Home__thumbnail-container">
                     <img className="Home__thumbnail-img" src={BlackjackThumbnail} alt="tictactoe Thumbnail" />
                 </div>

@@ -34,7 +34,7 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      <RouterProvider router={router} />
+        <RouterProvider router={router} />
     </div>
   );
 }

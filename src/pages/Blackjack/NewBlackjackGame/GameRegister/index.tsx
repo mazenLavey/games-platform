@@ -1,4 +1,5 @@
 import { useState, useContext } from 'react';
+import { BlackjackContext } from 'context/BlackjackContext';
 import { useNavigate } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 import FormInput from 'common/FormInput';
@@ -11,6 +12,7 @@ import { toastNotifications } from 'common/Toastify';
 import './index.css';
 
 const GameRegister: React.FC = () => {
+    const { initNewGame } = useContext(BlackjackContext);
     const navigate = useNavigate();
     const [playerName, setPlayerName] = useState<string>('');
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -25,9 +27,12 @@ const GameRegister: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
         try {
             setIsSubmitting(true)
+            const newId = await initNewGame(playerName)
+
+            navigate(`/blackjack/${newId}`)
+
             setIsSubmitting(false)
             toastNotifications.success();
         } catch (error: any) {
