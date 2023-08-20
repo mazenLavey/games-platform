@@ -84,7 +84,7 @@ const JoinExistingGame: React.FC = () => {
                     variant="contained"
                     type='submit'
                     sx={{
-                        background: "linear-gradient(90deg, #e51d74, #8d4fea)",
+                        background: "linear-gradient(60deg, #61000a, #0a3500)",
                         borderRadius: "12px",
                         fontWeight: "700",
                         fontSize: "20px",

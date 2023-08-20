@@ -42,7 +42,7 @@
 
 .Home__thumbnail-wrapper--disabled {
     position: relative;
-    pointer-events: none;
+    /* pointer-events: none; */
 }
 
 .Home__thumbnail-wrapper--disabled  img {
