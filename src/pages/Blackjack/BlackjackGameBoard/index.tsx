@@ -1,18 +1,37 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { BlackjackContext } from "context/BlackjackContext";
+import { useNavigate } from "react-router-dom";
+import routes from "routes";
+import LoadingBackdrop from "components/LoadingBackdrop";
 import PlayerBox from "./PlayerBox";
-import JoinLink from "./JoinLink";
+import JoinLink from "components/JoinLink";
 import PlayerBtns from "./PlayerBtns";
-import Button from '@mui/material/Button';
-import './index.css';
+import Btn from "components/Btn";
+import { toastNotifications } from "components/Toastify";
+import { ALERT_MESSAGES } from "constants/messages";
+import './index.scss';
 
 const BlackjackGameBoard: React.FC = () => {
     const { gameData, restartGame } = useContext(BlackjackContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(gameData.id === '') {
+            toastNotifications.warn(ALERT_MESSAGES.NOT_REFRESH);
+            navigate(routes.joinBlackjackGame, { replace: true });
+        };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [gameData.id])
+
+    if (gameData.id === '') {
+        return <LoadingBackdrop isLoading={true} />;
+    }
 
     return (
         <div className="BlackjackGameBoard">
             {gameData.players.length < 2 ?
-                <JoinLink gameId={gameData.id} />
+                <JoinLink />
                 :
                 <PlayerBox key={gameData.players[1].playerId} playerData={gameData.players[1]} playerIndex={1} />
             }
@@ -21,20 +40,7 @@ const BlackjackGameBoard: React.FC = () => {
                 gameData.gameOver ?
                     <div className="BlackjackGameBoard__winner">
                         <p >{gameData.winner}</p>
-                        <Button
-                            variant="contained"
-                            size='small'
-                            sx={{
-                                background: "linear-gradient(60deg, #61000a, #0a3500)",
-                                borderRadius: "12px",
-                                fontWeight: "500",
-                                fontSize: "14px",
-                                width: "fit-content",
-                            }}
-                            onClick={() => restartGame()}
-                        >
-                            play&nbsp;again
-                        </Button>
+                        <Btn text="play again" theme="darkBrowen" onClick={restartGame}/>
                     </div>
                     :
                     <PlayerBtns />

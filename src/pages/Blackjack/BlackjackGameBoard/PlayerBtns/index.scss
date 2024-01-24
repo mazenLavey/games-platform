@@ -1,0 +1,14 @@
+.PlayerBtns__actions {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.PlayerBtns__text {
+    font-size: 20px;
+    font-weight: 500;
+}

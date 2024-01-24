@@ -1,0 +1,16 @@
+.NewBlackjackGame {
+    display: flex;
+    flex-direction: column;
+}
+
+.NewBlackjackGame__Form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    color: white;
+}
+
+.NewBlackjackGame__PlayerInfo {
+    display: flex;
+    gap: 16px;
+}

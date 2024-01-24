@@ -2,7 +2,8 @@ import { createContext, useEffect, useState } from 'react';
 import { db } from 'config/firebase';
 import { ref, set, onValue, child, get } from "firebase/database";
 import { GameStatusType, NewGameType, playerInfoType, playerSymbolType } from 'types/interfaces';
-import { toastNotifications } from 'common/Toastify';
+import { toastNotifications } from 'components/Toastify';
+import { ALERT_MESSAGES } from 'constants/messages';
 
 type Props = {
     children: React.ReactNode
@@ -13,8 +14,8 @@ interface MessagesContextType {
     playerInfo: playerInfoType,
     handleBoxClick: (col: number, row: number) => void,
     handleReset: () => void,
-    initGame: (gameId: string, playerName: string, playerSymbol: playerSymbolType) => void,
-    joinExistingGame: (existingGameId: string, secondPlayerName: string) => void,
+    initGame: (gameId: string, playerName: string, playerSymbol: playerSymbolType) => Promise<void>,
+    joinExistingGame: (existingGameId: string, secondPlayerName: string) => Promise<void>,
 }
 
 const TicTakToeContext = createContext<MessagesContextType>({
@@ -30,6 +31,7 @@ const TicTakToeContext = createContext<MessagesContextType>({
         Nextplayer: null,
         winsX: 0,
         winsO: 0,
+        playersInSession: 0,
     },
     playerInfo: {
         playerName: "",
@@ -37,8 +39,8 @@ const TicTakToeContext = createContext<MessagesContextType>({
     },
     handleBoxClick: (col, row) => { },
     handleReset: () => { },
-    initGame: (gameId, playerName, playerSymbol) => { },
-    joinExistingGame: (existingGameId, secondPlayerName) => { },
+    initGame: (gameId, playerName, playerSymbol) => Promise.resolve(),
+    joinExistingGame: (existingGameId, secondPlayerName) => Promise.resolve(),
 })
 
 
@@ -56,6 +58,7 @@ const TicTakToeProvider: React.FC<Props> = ({ children }) => {
         Nextplayer: null,
         winsX: 0,
         winsO: 0,
+        playersInSession: 0,
     });
 
     const [playerInfo, setPlayerInfo] = useState<playerInfoType>({
@@ -75,7 +78,7 @@ const TicTakToeProvider: React.FC<Props> = ({ children }) => {
                 })
 
             } catch (error: any) {
-                toastNotifications.error(error.message)
+                toastNotifications.error(ALERT_MESSAGES.NETWORK_ERROR)
             }
         }
     }, [gameData.id]);
@@ -94,6 +97,7 @@ const TicTakToeProvider: React.FC<Props> = ({ children }) => {
             Nextplayer: playerSymbol === "x" ? "o" : "x",
             winsX: 0,
             winsO: 0,
+            playersInSession: 1,
         };
         
         const TicTakToeRef = ref(db, 'TicTakToe/' + newGame.id);
@@ -104,33 +108,53 @@ const TicTakToeProvider: React.FC<Props> = ({ children }) => {
                 playerName: playerName,
                 playerSymbol: playerSymbol
             });
-            setGameData(newGame)
-        } catch (error: any) {
-            throw new Error(error.message);
+            setGameData(newGame);
+            return Promise.resolve();
+
+        } catch (err: any) {
+            toastNotifications.error(ALERT_MESSAGES.NETWORK_ERROR);
+            console.error("[TicTakToe:initGame]", err);
+            return Promise.reject();
         }
     }
 
     const joinExistingGame = async (existingGameId: string, secondPlayerName: string) => {
-        const TicTakToeRef = ref(db);
+        const path = `TicTakToe/${existingGameId}`;
 
-        get(child(TicTakToeRef, `TicTakToe/${existingGameId}`)).then((snapshot) => {
-            if (snapshot.exists()) {
-                const data = snapshot.val();
-                let parsedData = JSON.parse(data)
-
-                setPlayerInfo({
-                    playerName: secondPlayerName,
-                    playerSymbol: parsedData.Nextplayer
-                })
-
-                setGameData(parsedData)
-
-            } else {
-                toastNotifications.warn()
+        try {
+            const snapshot = await get(child(ref(db), path));
+    
+            if (!snapshot.exists()) {
+                toastNotifications.error(ALERT_MESSAGES.GAME_NOT_EXIST);
+                return Promise.reject();
             }
-        }).catch((error) => {
-            toastNotifications.error(error);
-        });
+    
+            const data = snapshot.val();
+            let parsedData = JSON.parse(data);
+    
+            if ( parsedData.playersInSession > 1 ) {
+                toastNotifications.error(ALERT_MESSAGES.SESSION_NOT_AVAILABLE);
+                return Promise.reject();
+            };
+    
+            const updatedData: NewGameType = {
+                ...parsedData,
+                playersInSession: 2,
+            };
+    
+            setPlayerInfo({
+                playerName: secondPlayerName,
+                playerSymbol: parsedData.Nextplayer,
+            });
+    
+            setGameData(updatedData);
+            return Promise.resolve();
+
+        } catch (err: any) {
+            toastNotifications.error(ALERT_MESSAGES.NETWORK_ERROR);
+            console.error("[TicTakToe:joinExistingGame]", err);
+            return Promise.reject();
+        };
     }
 
     const checkWinner = (newGrid: any): GameStatusType => {
@@ -232,12 +256,20 @@ const TicTakToeProvider: React.FC<Props> = ({ children }) => {
                 ],
                 winner: null,
                 Nextplayer: playerInfo.playerSymbol,
+                playersInSession: 0,
             }
         })
     };
 
     return (
-        <TicTakToeContext.Provider value={{ gameData, playerInfo, handleBoxClick, handleReset, initGame, joinExistingGame }}>
+        <TicTakToeContext.Provider value={{ 
+            gameData, 
+            playerInfo, 
+            handleBoxClick, 
+            handleReset, 
+            initGame, 
+            joinExistingGame, 
+        }}>
             {children}
         </TicTakToeContext.Provider>
     )

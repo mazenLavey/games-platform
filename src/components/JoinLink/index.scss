@@ -1,0 +1,15 @@
+.JoinLink {
+    display: flex;
+    align-items: center;
+    color: white;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0px 8px;
+    border-radius: 8px;
+    width: max-content;
+}
+
+.JoinLink__title {
+    font-size: 14px;
+    font-weight: 400;
+    color: white;
+}

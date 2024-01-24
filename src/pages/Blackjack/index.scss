@@ -1,0 +1,31 @@
+@import "styles/index.scss";
+
+.Blackjack {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include mobile {
+        margin: 0 8px;
+    }
+}
+
+.Blackjack__Tabs {
+    position: absolute;
+    bottom: 150px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.Blackjack__Content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}

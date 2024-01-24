@@ -1,0 +1,15 @@
+.JoinExistingGame {
+    display: flex;
+    flex-direction: column;
+}
+
+.JoinExistingGame__Inputs,
+.JoinExistingGame__Form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.JoinExistingGame__Inputs {
+    gap: 8px;
+}

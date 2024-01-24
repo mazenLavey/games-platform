@@ -1,0 +1,50 @@
+.FormInput {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.FormInput__input {
+  height: 50px;
+  width: 100%;
+  padding: 16px;
+  border-radius: 16px;
+  color: white;
+  border: 1px solid transparent;
+  outline: none;
+
+  appearance: none;
+  background-clip: padding-box;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  background: radial-gradient(108.33% 108.33% at 50.00% 47.45%, rgba(84, 94, 102, 0.00) 0%, rgba(84, 94, 102, 0.24) 100%);
+  box-shadow: 6px 0 28px 0 rgba(255, 255, 255, 0.08) inset, 0 6px 8px 0 rgba(255, 255, 255, 0.02) inset, -6px 0px 8px 0px rgba(255, 255, 255, 0.02) inset, 0px -6px 8px 0px rgba(255, 255, 255, 0.08) inset;
+  backdrop-filter: blur(48px);
+
+  &::placeholder {
+    color: #cecece;
+  }
+
+  &:hover:enabled,
+  &:focus:enabled {
+    border-color: white;
+    background-color: rgb(255, 255, 255, 0.02);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+  }
+  
+  &--error {
+    border-color: rgba(191, 18, 22, 0.95);
+    background-color: rgba(223, 51, 55, 0.05);
+  }
+}
+
+.FormInput__label {
+  color: white;
+
+  &::first-letter {
+    text-transform: capitalize;
+  }
+}
