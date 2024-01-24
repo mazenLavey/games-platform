@@ -4,30 +4,31 @@ import Home from 'pages/Home';
 import TicTakToe from 'pages/TicTakToe';
 import NewTicTakToeGame from 'pages/TicTakToe/NewTicTakToeGame';
 import JoinTicTakToeGame from 'pages/TicTakToe/JoinTicTakToeGame';
-import GameBoard from 'pages/TicTakToe/GameBoard';
+import TicTakToeGameBoard from 'pages/TicTakToe/TicTakToeGameBoard';
 import Blackjack from 'pages/Blackjack';
 import NewBlackjackGame from 'pages/Blackjack/NewBlackjackGame';
 import JoinBlackjackGame from 'pages/Blackjack/JoinBlackjackGame';
 import BlackjackGameBoard from 'pages/Blackjack/BlackjackGameBoard';
+import routes from 'routes';
 import 'normalize.css';
-import './index.css';
+import './index.scss';
 
 const App: React.FC = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path='/' element={<RootLayout />}>
+      <Route path={routes.home} element={<RootLayout />}>
         <Route index element={<Home />} />
-        <Route path='tic-tak-toe' element={<TicTakToe />}>
-          <Route path='new-game' element={<NewTicTakToeGame />} />
-          <Route path='join-game' element={<JoinTicTakToeGame />} />
-          <Route path=':id' element={<GameBoard />} />
+        <Route path={routes.ticTakToePage} element={<TicTakToe />}>
+          <Route path={routes.newTicTakToeGame} element={<NewTicTakToeGame />} />
+          <Route path={routes.joinTicTakToeGame} element={<JoinTicTakToeGame />} />
+          <Route path={routes.ticTakToeGameBoard} element={<TicTakToeGameBoard />} />
         </Route>
-        <Route path='blackjack' element={<Blackjack />}>
-          <Route path='new-game' element={<NewBlackjackGame />} />
-          <Route path='join-game' element={<JoinBlackjackGame />} />
-          <Route path=':id' element={<BlackjackGameBoard />} />
+        <Route path={routes.blackjackPage} element={<Blackjack />}>
+          <Route path={routes.newBlackjackGame} element={<NewBlackjackGame />} />
+          <Route path={routes.joinBlackjackGame} element={<JoinBlackjackGame />} />
+          <Route path={routes.blackjackGameBoard} element={<BlackjackGameBoard />} />
         </Route>
-        <Route path='*' element={<Navigate to='/' replace />} />
+        <Route path='*' element={<Navigate to={routes.home} replace />} />
       </Route>
     )
   )

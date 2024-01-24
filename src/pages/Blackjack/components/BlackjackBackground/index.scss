@@ -1,0 +1,12 @@
+@import "styles/index.scss";
+
+.BlackjackBackground {
+    position: absolute;
+    bottom: -100px;
+    right: 0;
+    width: 200px;
+
+    @include mobile {
+        display: none;
+    }
+}

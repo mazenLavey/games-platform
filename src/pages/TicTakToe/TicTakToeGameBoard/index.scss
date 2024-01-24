@@ -1,0 +1,14 @@
+.TicTakToeGameBoard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.TicTakToeGameBoard__info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}

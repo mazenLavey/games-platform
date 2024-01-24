@@ -1,37 +1,27 @@
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import Button from '@mui/material/Button';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
-import BlackjackLogo from './assets/logo.png';
-import Cards from './assets/cards.png';
-import './index.css';
+import { ErrorBoundary } from "react-error-boundary";
+import GameErrorFallback from "components/GameErrorFallback";
+import routes from "routes";
+import BlackjackLogo from "./components/BlackjackLogo";
+import BlackjackBoardWrapper from "./components/BlackjackBoardWrapper";
+import './index.scss';
 
 const Blackjack: React.FC = () => {
-
     const navigate = useNavigate();
     const location = useLocation();
 
     return (
         <main className="Blackjack">
-            <div className="Blackjack__container container">
-
+            <BlackjackBoardWrapper>
                 {
-                    location.pathname === '/blackjack' ?
-                        <div className="Blackjack__logo-container">
-                            <img className="Blackjack__logo popIn-animation" src={BlackjackLogo} alt="background" />
-                        </div>
-                        :
-                        null
-                }
-
-                <img className="Blackjack__cards" src={Cards} alt="background" />
-
-                {
-                    location.pathname === '/blackjack' ?
-                        <div className="Blackjack__tabs">
+                    location.pathname === routes.blackjackPage ?
+                    <>
+                        <BlackjackLogo />
+                        <div className="Blackjack__Tabs">
                             <Button
                                 variant="contained"
-                                onClick={() => navigate('new-game')}
+                                onClick={() => navigate(routes.newBlackjackGame)}
                                 sx={{
                                     background: "linear-gradient(60deg, #61000a, #0a3500)",
                                     borderRadius: "12px",
@@ -44,7 +34,7 @@ const Blackjack: React.FC = () => {
                             </Button>
                             <Button
                                 variant="contained"
-                                onClick={() => navigate('join-game')}
+                                onClick={() => navigate(routes.joinBlackjackGame)}
                                 sx={{
                                     background: "linear-gradient(60deg, #61000a, #0a3500)",
                                     borderRadius: "12px",
@@ -57,21 +47,15 @@ const Blackjack: React.FC = () => {
 
                             </Button>
                         </div>
+                    </>
                         :
-                        <div className="Blackjack__content">
-                            <Outlet />
+                        <div className="Blackjack__Content">
+                            <ErrorBoundary FallbackComponent={GameErrorFallback}>
+                                <Outlet />
+                            </ErrorBoundary>
                         </div>
                 }
-                <button
-                    className="Blackjack__close"
-                    onClick={() => navigate('/')}
-                >
-                    <FontAwesomeIcon
-                        className="Blackjack__close-icon"
-                        icon={faCircleXmark} size="2x"
-                    />
-                </button>
-            </div>
+            </BlackjackBoardWrapper>
         </main>
     )
 }

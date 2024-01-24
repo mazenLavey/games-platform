@@ -1,0 +1,19 @@
+.Header {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    z-index: 100;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+}
+
+.Header__logo-container {
+    height: 100%;
+}
+
+.Header__logo {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    cursor: pointer;
+}

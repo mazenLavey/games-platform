@@ -1,0 +1,29 @@
+@import "styles/index.scss";
+
+.TicTakToe {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include mobile {
+        margin: 0 8px;
+    }
+}
+
+.TicTakToe__Tabs {
+    position: absolute;
+    bottom: 85px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.TicTakToe__Content {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    z-index: 10;
+}

@@ -1,5 +1,5 @@
 import { BlackjackPlayerType } from 'types/interfaces';
-import './index.css';
+import './index.scss';
 
 type Props = {
     playerData: BlackjackPlayerType,

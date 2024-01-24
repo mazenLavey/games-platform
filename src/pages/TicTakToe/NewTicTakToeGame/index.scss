@@ -1,0 +1,33 @@
+.NewTicTakToeGame {
+    display: flex;
+    flex-direction: column;
+}
+
+.NewTicTakToeGame__Form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    color: white;
+}
+
+.NewTicTakToeGame__PlayerInfo {
+    display: flex;
+    gap: 16px;
+}
+
+.NewTicTakToeGame__PlayerSymbol {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    white-space: nowrap;
+
+    & .MuiToggleButtonGroup-grouped {
+        color: white;
+    }
+
+    & .Mui-selected {
+        background-image: radial-gradient(#e51d74, #8d4fea4a);
+        background-color: unset;
+        color: #fff !important;
+    }
+}

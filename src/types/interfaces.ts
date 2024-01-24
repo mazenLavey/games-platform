@@ -1,6 +1,3 @@
-
-
-
 export type playerSymbolType = 'x' | 'o'
 
 export type GameStatusType = 'x' | 'o' | 'draw' | null
@@ -22,6 +19,7 @@ export interface NewGameType {
     Nextplayer: playerSymbolType | null,
     winsX: number,
     winsO: number,
+    playersInSession: number,
 }
 
 export interface PlayerCard {
@@ -50,3 +48,5 @@ export interface PlayerInfoType {
     playerIndex: 0 | 1,
     playerId: string
 }
+
+export type TbtnTheme = "purple" | "darkBrowen" | "white"

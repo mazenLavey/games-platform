@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { BlackjackContext } from "context/BlackjackContext";
 import Button from '@mui/material/Button';
-import './index.css';
+import './index.scss';
 
 const PlayerBtns: React.FC = () => {
     const { gameData, playerInfo, getCard, skipTurn } = useContext(BlackjackContext);

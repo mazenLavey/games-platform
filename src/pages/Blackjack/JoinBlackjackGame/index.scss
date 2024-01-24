@@ -1,0 +1,15 @@
+.JoinBlackjackGame {
+    display: flex;
+    flex-direction: column;
+}
+
+.JoinBlackjackGame__Inputs,
+.JoinBlackjackGame__Form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.JoinBlackjackGame__Inputs {
+    gap: 8px;
+}

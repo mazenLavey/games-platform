@@ -1,9 +1,10 @@
 import { createContext, useEffect, useState } from "react";
 import { db } from 'config/firebase';
 import { ref, set, onValue, child, get } from "firebase/database";
-import { toastNotifications } from "common/Toastify";
+import { toastNotifications } from "components/Toastify";
 import { nanoid } from "nanoid";
 import { BlackjackPlayerType, BlackjackType, PlayerCard, PlayerInfoType } from "types/interfaces";
+import { ALERT_MESSAGES } from "constants/messages";
 
 type Props = {
     children: React.ReactNode
@@ -11,8 +12,8 @@ type Props = {
 
 type BlackjackContextType = {
     gameData: BlackjackType
-    initNewGame: (playerName: string) => void,
-    joinGame: (gameId: string, playerName: string) => void,
+    initNewGame: (newGameId: string, playerName: string) =>  Promise<void>,
+    joinGame: (gameId: string, playerName: string) => Promise<void>,
     getCard: (playerId: string, playerIndex: number) => void,
     playerInfo: PlayerInfoType,
     skipTurn: (playerIndex: number) => void,
@@ -28,8 +29,8 @@ const BlackjackContext = createContext<BlackjackContextType>({
         playersInSession: 0,
         currentPlayerIndex: 0
     },
-    initNewGame: (playerName) => { },
-    joinGame: (gameId, playerName) => { },
+    initNewGame: (newGameId, playerName) => Promise.resolve(),
+    joinGame: (gameId, playerName) => Promise.resolve(),
     getCard: (playerId, playerIndex) => { },
     skipTurn: (playerIndex) => { },
     restartGame: () => { },
@@ -67,14 +68,13 @@ const BlackjackProvider: React.FC<Props> = ({ children }) => {
                 })
 
             } catch (error: any) {
-                toastNotifications.error(error.message)
+                toastNotifications.error(ALERT_MESSAGES.NETWORK_ERROR)
             }
         }
     }, [gameData.id]);
 
 
-    const initNewGame = async (playerName: string) => {
-        const newGameId: string = nanoid();
+    const initNewGame = async (newGameId: string, playerName: string) => {
         const playerId: string = nanoid();
 
         try {
@@ -113,54 +113,66 @@ const BlackjackProvider: React.FC<Props> = ({ children }) => {
                 playerIndex: 0
             })
 
-            return newGameId
+            return Promise.resolve();
 
         } catch (error: any) {
-            toastNotifications.error(error.message)
+            toastNotifications.error(ALERT_MESSAGES.NETWORK_ERROR);
+            return Promise.reject();
         }
     }
 
     const joinGame = async (gameId: string, playerName: string) => {
         const blackjackRef = ref(db);
         const playerId: string = nanoid();
+
         try {
             const snapshot = await get(child(blackjackRef, `blackjack/${gameId}`));
-            if (snapshot.exists()) {
-                const data = JSON.parse(snapshot.val());
+            if (!snapshot.exists()) {
+                toastNotifications.warn(ALERT_MESSAGES.GAME_NOT_EXIST);
+                return Promise.reject();
+            };
 
-                const [firstCard, secondCard] = await Promise.all([
-                    fetchCard(data.deckId),
-                    fetchCard(data.deckId)
-                ]);
-    
-                const updatedHandValue = calculateHandValue([firstCard, secondCard]);
+            const data = JSON.parse(snapshot.val());
 
-                const newPlayer: BlackjackPlayerType = {
-                    playerId: playerId,
-                    name: playerName,
-                    cards: [firstCard, secondCard],
-                    handValue: updatedHandValue
-                };
-
-                const updatedGameData: BlackjackType = {
-                    ...data,
-                    players: [...data.players, newPlayer],
-                    playersInSession: 2
-                };
-
-                await updateDb(updatedGameData);
-
-                setGameData(updatedGameData);
-
-                setPlayerInfo({
-                    playerId: playerId,
-                    playerIndex: 1
-                })
-            } else {
-                toastNotifications.warn();
+            if (data?.players.length > 1) {
+                toastNotifications.warn(ALERT_MESSAGES.SESSION_NOT_AVAILABLE);
+                return Promise.reject();
             }
+
+            const [firstCard, secondCard] = await Promise.all([
+                fetchCard(data.deckId),
+                fetchCard(data.deckId)
+            ]);
+
+            const updatedHandValue = calculateHandValue([firstCard, secondCard]);
+
+            const newPlayer: BlackjackPlayerType = {
+                playerId: playerId,
+                name: playerName,
+                cards: [firstCard, secondCard],
+                handValue: updatedHandValue
+            };
+
+            const updatedGameData: BlackjackType = {
+                ...data,
+                players: [...data.players, newPlayer],
+                playersInSession: 2
+            };
+
+            await updateDb(updatedGameData);
+
+            setGameData(updatedGameData);
+
+            setPlayerInfo({
+                playerId: playerId,
+                playerIndex: 1
+            });
+
+            return Promise.resolve();
+
         } catch (error: any) {
-            toastNotifications.error(error.message);
+            toastNotifications.error(ALERT_MESSAGES.NETWORK_ERROR);
+            return Promise.reject();
         }
     };
 
@@ -171,7 +183,7 @@ const BlackjackProvider: React.FC<Props> = ({ children }) => {
             await set(blackjackRef, JSON.stringify(updatedGameData));
 
         } catch (error: any) {
-            toastNotifications.error(error.message)
+            toastNotifications.error(ALERT_MESSAGES.NETWORK_ERROR)
         }
     }
 
@@ -226,7 +238,7 @@ const BlackjackProvider: React.FC<Props> = ({ children }) => {
             }
 
         } catch (error: any) {
-            toastNotifications.error(error.message)
+            toastNotifications.error(ALERT_MESSAGES.NETWORK_ERROR)
         }
     }
 
@@ -241,7 +253,7 @@ const BlackjackProvider: React.FC<Props> = ({ children }) => {
             await updateDb(updatedGameData);
 
         } catch (error: any) {
-            toastNotifications.error(error.message)
+            toastNotifications.error(ALERT_MESSAGES.NETWORK_ERROR)
         }
     }
 
@@ -339,7 +351,7 @@ const BlackjackProvider: React.FC<Props> = ({ children }) => {
     
             setGameData(updatedGameData);
         } catch (error: any) {
-            toastNotifications.error(error.message);
+            toastNotifications.error(ALERT_MESSAGES.NETWORK_ERROR);
         }
     };
     

@@ -1,16 +1,93 @@
-import JoinExistingGame from "./JoinExistingGame";
+import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { TicTakToeContext } from 'context/TicTakToeContext';
+import FormInput from 'components/FormInput';
+import Btn from 'components/Btn';
+import routes from 'routes';
+import GoBackBtn from 'components/GoBackBtn';
+import LoadingBackdrop from 'components/LoadingBackdrop';
+import { toastNotifications } from 'components/Toastify';
+import { ALERT_MESSAGES } from 'constants/messages';
+import './index.scss';
 
-
-
-
+type UserType = {
+    gameId: string,
+    userName: string
+}
 
 const JoinTicTakToeGame: React.FC = () => {
+    const { joinExistingGame } = useContext(TicTakToeContext);
+    const [userData, setUserData] = useState<UserType>({
+        gameId: "",
+        userName: ""
+    })
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+    const navigate = useNavigate();
+
+    const handleClose = () => {
+        setIsSubmitting(false);
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target
+        setUserData(prev => {
+            return {
+                ...prev,
+                [name]: value
+            }
+        })
+    }
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        try {
+            setIsSubmitting(true);
+
+            await joinExistingGame(userData.gameId, userData.userName);
+
+            navigate(`${routes.ticTakToeGameBoard}?gameid=${userData.gameId}`);
+            
+            setIsSubmitting(false);
+            
+            toastNotifications.success(ALERT_MESSAGES.JOIN_GAME);
+        } catch {
+            setIsSubmitting(false)
+        }
+    }
 
     return (
-        <div className="JoinTicTakToeGame">
-            <JoinExistingGame />
+        <div className='JoinExistingGame'>
+            <form className='JoinExistingGame__Form' onSubmit={handleSubmit}>
+                <div className='JoinExistingGame__Inputs'>
+                    <FormInput
+                        type="text"
+                        id="gameId"
+                        name='gameId'
+                        label="Game Id"
+                        placeholder='Join with Id'
+                        value={userData.gameId}
+                        onChange={handleChange}
+                        required
+                    />
+                    <FormInput
+                        type="text"
+                        id="userName"
+                        name='userName'
+                        label="Your Name"
+                        placeholder="Enter your name"
+                        value={userData.userName}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                <Btn theme='purple' text='Join' type='submit' isWide/>
+            </form >
+            <GoBackBtn />
+            <LoadingBackdrop isLoading={isSubmitting} onClick={handleClose} />
         </div>
-    );
+    )
 }
 
 export default JoinTicTakToeGame;
