@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { TicTakToeProvider } from "context/TicTakToeContext";
 import { BlackjackProvider } from 'context/BlackjackContext';
-import App from './app';
+import App from './App';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
